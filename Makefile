@@ -7,15 +7,16 @@ SRCS := $(wildcard *.cpp)
 OBJS := $(patsubst %cpp,%o,$(SRCS))
 BULIDOBJS=$(shell find ./build/obj -name "*.o")
 export OBJDIR=$(ROOT_DIR)/build/obj/
+BINDIR=$(ROOT_DIR)/build/bin/
 
-.PHONY: all
+.PHONY:all clean
 
 .IGNORE:MKOBJDIR
 
 all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests
 
 runtests:
-	$(LD) -o runtests $(BULIDOBJS)
+	$(LD) -o $(BINDIR)runtests $(BULIDOBJS)
 
 $(SUBDIRS):ECHO
 	make -C $@
@@ -28,7 +29,11 @@ $(SUBDIRS):ECHO
 
 MKOBJDIR:
 	-mkdir build/obj/
+	-mkdir build/bin/
 
 ECHO:
 	@echo $(SUBDIRS)
 
+clean:
+	rm -rf build/obj/
+	rm -rf build/bin/
