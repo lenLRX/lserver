@@ -11,7 +11,7 @@ void Logger::flush(){
 
 void Logger::redirectStream(string filename){
 	_fstream.open(filename, ios::app | ios::out);
-	stream.set_rdbuf(_fstream.rdbuf());
+	stream.rdbuf(_fstream.rdbuf());
 	stream.sync_with_stdio(false);
 }
 
