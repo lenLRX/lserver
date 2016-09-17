@@ -16,6 +16,7 @@ class TestManager
 public:
 	static TestManager& getInstance();
 	map<string, function<bool(void)>> _test_functions;
+	map<string, function<void(void)>> _test_bunch_functions;
 private:
 
 	TestManager() = default;
@@ -32,6 +33,16 @@ private:
 	__TEST_REGISTER_FUNC(testfunc)\
 	static int testfunc##TEST_REGISTER_FUNC_HELPER = testfunc##TEST_REGISTER_FUNC();
 
+#define __TEST_REGISTER_BUNCH_FUNC(testbunchfunc)\
+    int testbunchfunc##TEST_BUNCH_FUNC(){\
+	TestManager::getInstance()._test_bunch_cunctions[#testbunchfunc] = \
+	function<void(void)>(testbunchfunc)}\
+	return 0;\
+	}
+
+#define ADDBUNCHTEST(testbunchfunc)\
+    __TEST_REGISTER_BUNCH_FUNC(testbunchfunc)\
+	static int testbunchfunc##TEST_REGISTER_BUNCH_FUNC_HELPER = testbunchfunc##TEST_BUNCH_FUNC();
 
 #define RUNALLTEST \
 do \

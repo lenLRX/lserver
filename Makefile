@@ -1,6 +1,7 @@
 CC = g++
 LD = g++
 CFLAGS = -std=c++11
+LDFLAGS = -lpthread
 ROOT_DIR=$(shell pwd)
 SUBDIRS=$(shell ls -d */|grep -v "build"|grep -v "temp")
 SRCS := $(wildcard *.cpp)  
@@ -16,7 +17,7 @@ BINDIR=$(ROOT_DIR)/build/bin/
 all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests
 
 runtests:
-	$(LD) -o $(BINDIR)runtests $(BULIDOBJS)
+	$(LD) $(LDFLAGS) -o $(BINDIR)runtests $(BULIDOBJS)
 
 $(SUBDIRS):ECHO
 	make -C $@
