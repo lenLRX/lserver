@@ -35,8 +35,8 @@ private:
 
 #define __TEST_REGISTER_BUNCH_FUNC(testbunchfunc)\
     int testbunchfunc##TEST_BUNCH_FUNC(){\
-	TestManager::getInstance()._test_bunch_cunctions[#testbunchfunc] = \
-	function<void(void)>(testbunchfunc)}\
+	TestManager::getInstance()._test_bunch_functions[#testbunchfunc] = \
+	function<void(void)>(testbunchfunc);\
 	return 0;\
 	}
 
@@ -62,6 +62,14 @@ if (p.second())\
 {\
 	detail += " fail "; \
 }\
+	_test_details.push_back(detail); \
+}\
+for (pair<string, function<void(void)>> p : TestManager::getInstance()._test_bunch_functions)\
+{\
+	test_count++; \
+	string detail = p.first; \
+	LOG << "running bunch test: " << detail << endl;\
+	p.second();\
 	_test_details.push_back(detail); \
 }\
 }while (0)

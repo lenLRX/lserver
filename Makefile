@@ -1,7 +1,7 @@
 CC = g++
 LD = g++
-CFLAGS = -std=c++11
-LDFLAGS = -lpthread
+export CFLAGS = -pthread -std=c++11#order matters
+LDFLAGS = -pthread
 ROOT_DIR=$(shell pwd)
 SUBDIRS=$(shell ls -d */|grep -v "build"|grep -v "temp")
 SRCS := $(wildcard *.cpp)  

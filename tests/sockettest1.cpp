@@ -1,8 +1,10 @@
+#include <stdlib.h>
+#include <stdint.h>
 #include "../utility/socket.h"
+#include "test.h"
 #include "../log/log.h"
 #include <thread>
 #include <string>
-#include "test.h"
 #include <memory.h>
 
 
@@ -19,7 +21,7 @@ bool socket_sender_test(){
 	struct sockaddr_in sender_addr;
     bzero(&sender_addr,sizeof(sender_addr)); //把一段内存区的内容全部设置为0
     sender_addr.sin_family = AF_INET;    //internet协议族
-    sender_addr.sin_addr.s_addr = inet_addr("127.0.0.1")//INADDR_ANY表示自动获取本机地址
+    sender_addr.sin_addr.s_addr = inet_addr("127.0.0.1");//INADDR_ANY表示自动获取本机地址
     sender_addr.sin_port = htons(0);    //0表示让系统自动分配一个空闲端口
     //创建用于internet的流协议(TCP)socket,用senderFD代表客户机socket
     int senderFD = socket(AF_INET,SOCK_STREAM,0);
@@ -39,7 +41,7 @@ bool socket_sender_test(){
     struct sockaddr_in receiver_addr;
     bzero(&receiver_addr,sizeof(receiver_addr));
     receiver_addr.sin_family = AF_INET;
-    receiver_addr.sin_addr.s_addr = inet_addr("127.0.0.1")
+    receiver_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     receiver_addr.sin_port = htons(port);
     socklen_t receiver_addr_length = sizeof(receiver_addr);
     //向服务器发起连接,连接成功后senderFD代表了客户机和服务器的一个socket连接
@@ -98,16 +100,17 @@ bool socket_receiver_test(){
     }
 
 	struct sockaddr_in client_addr;
-    socklen_t length = sizeof(client_addr);
 
-	int conn = accept(recieverFD,(struct sockaddr*)&client_addr,&length);
+	socklen_t client_addr_len = sizeof(client_addr);
+
+	int conn = accept(recieverFD,(struct sockaddr*)&client_addr, &client_addr_len);
 	if(conn < 0){
 		LOG << "server Accept failed" << endl;
 		return false;
 	}
 
 	char buffer[buffersize];
-	length = recv(conn,buffer,buffersize,0);
+	int length = recv(conn,buffer,buffersize,0);
 	if(length < 0){
 		LOG << "recv failed" << endl;
 		return false;
@@ -135,7 +138,7 @@ void socketbunchtest1(){
 	thread sender_thread(socket_sender_test);
 	thread receiver_thread(socket_receiver_test);
 	sender_thread.join();
-	receiver.join();
+	receiver_thread.join();
 }
 
 ADDBUNCHTEST(socketbunchtest1)
