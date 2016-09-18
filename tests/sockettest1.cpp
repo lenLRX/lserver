@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdint.h>
-#include "../utility/socket.h"
+#include "../utility/socket_header.h"
 #include "test.h"
 #include "../log/log.h"
 #include <thread>
@@ -62,6 +62,7 @@ bool socket_sender_test(){
 		LOG << "send failed" << endl;
 		return false;
 	}
+	close(senderFD);
 	return true;
 }
 
@@ -131,6 +132,9 @@ bool socket_receiver_test(){
 		LOG << "got: " << gotstr << endl;
 		return false;
 	}
+
+	close(conn);
+	close(recieverFD);
 
 	return true;
 }

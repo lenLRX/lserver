@@ -6,7 +6,7 @@ ROOT_DIR=$(shell pwd)
 SUBDIRS=$(shell ls -d */|grep -v "build"|grep -v "temp")
 SRCS := $(wildcard *.cpp)  
 OBJS := $(patsubst %cpp,%o,$(SRCS))
-BULIDOBJS=$(shell find ./build/obj -name "*.o")
+COMMONOBJS=$(shell find ./build/obj -name "*.o")
 export OBJDIR=$(ROOT_DIR)/build/obj/
 BINDIR=$(ROOT_DIR)/build/bin/
 
@@ -14,16 +14,19 @@ BINDIR=$(ROOT_DIR)/build/bin/
 
 .IGNORE:MKOBJDIR
 
-all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests
+all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests httplisten
+
+httplisten:
+	$(LD) $(LDFLAGS) -o $(BINDIR)runtests $(COMMONOBJS) httplisten.o
 
 runtests:
-	$(LD) $(LDFLAGS) -o $(BINDIR)runtests $(BULIDOBJS)
+	$(LD) $(LDFLAGS) -o $(BINDIR)runtests $(COMMONOBJS) runtests.o
 
 $(SUBDIRS):ECHO
 	make -C $@
 
 %.o:%.cpp
-	$(CC) $(CFLAGS) -c $^ -o $(OBJDIR)$@
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 
 
@@ -36,5 +39,4 @@ ECHO:
 	@echo $(SUBDIRS)
 
 clean:
-	rm -rf build/obj/
-	rm -rf build/bin/
+	rm -rf build/
