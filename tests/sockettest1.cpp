@@ -79,7 +79,7 @@ bool socket_receiver_test(){
     int recieverFD = socket(AF_INET,SOCK_STREAM,0);
     if( recieverFD < 0)
     {
-        printf("Create Socket Failed!");
+        LOG << "Create Socket Failed!" << endl;
         return false;
     }
 
