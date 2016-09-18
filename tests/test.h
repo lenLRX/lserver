@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <thread>
 #include "../log/log.h"
 using namespace std;
 
@@ -44,6 +45,32 @@ private:
     __TEST_REGISTER_BUNCH_FUNC(testbunchfunc)\
 	static int testbunchfunc##TEST_REGISTER_BUNCH_FUNC_HELPER = testbunchfunc##TEST_BUNCH_FUNC();
 
+#define DECL_TEST_THREADS\
+    vector<pair<string,thread>> localthreads;\
+	map<string,bool> __FILE__##result;
+
+#define ADD_A_TEST_TO_BUNCH(func)\
+    localthreads.push_back(pair<string,thread>(\
+	#func,\
+	thread([&](){\
+	__FILE__##result[#func] = func();})\
+	));
+
+#define WAIT_ALL_THREADS\
+    for(auto& t:localthreads){\
+	    t.second.join();\
+		test_count++;\
+		string detail = t.first;\
+		if(__FILE__##result[detail]){\
+		    detail +=  " success ";\
+			success_count++;\
+		}\
+		else{\
+		    detail += " fail ";\
+		}\
+		_test_details.push_back(detail);\
+	}
+
 #define RUNALLTEST \
 do \
 {\
@@ -66,7 +93,6 @@ if (p.second())\
 }\
 for (pair<string, function<void(void)>> p : TestManager::getInstance()._test_bunch_functions)\
 {\
-	test_count++; \
 	string detail = p.first; \
 	LOG << "running bunch test: " << detail << endl;\
 	p.second();\

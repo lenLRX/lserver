@@ -6,6 +6,7 @@
 #include <thread>
 #include <string>
 #include <memory.h>
+#include <unistd.h>
 
 
 
@@ -61,7 +62,7 @@ bool socket_sender_test(){
 		LOG << "send failed" << endl;
 		return false;
 	}
-	return false;
+	return true;
 }
 
 
@@ -122,7 +123,7 @@ bool socket_receiver_test(){
 
 	if(gotstr == checkstr)
 	{
-		LOG << "recv success" << endl;
+		LOG << "recv test success" << endl;
 		return true;
 	}else{
 		LOG << "error: got string not equal to the string we sent" << endl;
@@ -135,10 +136,11 @@ bool socket_receiver_test(){
 }
 
 void socketbunchtest1(){
-	thread sender_thread(socket_sender_test);
-	thread receiver_thread(socket_receiver_test);
-	sender_thread.join();
-	receiver_thread.join();
+	DECL_TEST_THREADS
+	ADD_A_TEST_TO_BUNCH(socket_receiver_test)
+	sleep(1);//let receiver wait for sender
+	ADD_A_TEST_TO_BUNCH(socket_sender_test)
+	WAIT_ALL_THREADS
 }
 
 ADDBUNCHTEST(socketbunchtest1)
