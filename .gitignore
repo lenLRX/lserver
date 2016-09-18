@@ -1,3 +1,7 @@
 .vscode
 *.o
 temp
+GPATH
+GRTAGS
+GSYMS
+GTAGS
