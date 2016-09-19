@@ -49,6 +49,7 @@ public:
 	}
 private:
     friend class ServerSocket;
+	friend class ClientSocket;
     Connection(int fd,struct sockaddr_in addr);
 	struct sockaddr_in opp_addr;
 };
@@ -64,7 +65,12 @@ public:
 class ClientSocket:public Socket
 {
 public:
-    ClientSocket();
+    ClientSocket(string ip,int port);
+	Connection getConnection();
+	~ClientSocket();
+private:
+    string ip;
+	int port;
 };
 
 

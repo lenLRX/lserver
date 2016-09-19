@@ -27,6 +27,7 @@ Connection::Connection(Connection&& temp):Socket(temp.fd){
 Connection& Connection::operator = (Connection& other){
 	this->fd = other.fd;
 	other.fd = -1;
+	this->opp_addr = other.opp_addr;
 	return *this;
 }
 	
@@ -86,4 +87,50 @@ Connection ServerSocket::accept(){
 
 ServerSocket::~ServerSocket(){
 	;
+}
+
+ClientSocket::ClientSocket(string ip,int port):ip(ip),port(port){
+	struct sockaddr_in ClientAddr;
+    bzero(&ClientAddr,sizeof(ClientAddr)); //把一段内存区的内容全部设置为0
+    ClientAddr.sin_family = AF_INET;    //internet协议族
+    ClientAddr.sin_addr.s_addr = htons(INADDR_ANY);//INADDR_ANY表示自动获取本机地址
+    ClientAddr.sin_port = htons(0);    //0表示让系统自动分配一个空闲端口
+    //创建用于internet的流协议(TCP)socket,用senderFD代表客户机socket
+    int senderFD = socket(AF_INET,SOCK_STREAM,0);
+    if( senderFD < 0)
+    {
+        LOG << "Create Socket Failed!\n" << endl;
+        throw exception();
+    }
+    //把客户机的socket和客户机的socket地址结构联系起来
+    if(socket_namespace::bind(senderFD,(struct sockaddr*)&ClientAddr,sizeof(ClientAddr)))
+    {
+        LOG << "Client Bind Port Failed!\n" << endl; 
+        throw exception();
+    }
+ 
+    
+}
+
+Connection ClientSocket::getConnection(){
+	//设置一个socket地址结构ServerAddr,代表服务器的internet地址, 端口
+    struct sockaddr_in ServerAddr;
+    bzero(&ServerAddr,sizeof(ServerAddr));
+    ServerAddr.sin_family = AF_INET;
+    ServerAddr.sin_addr.s_addr = inet_addr(ip.c_str());
+    ServerAddr.sin_port = htons(port);
+    socklen_t ServerAddr_length = sizeof(ServerAddr);
+    //向服务器发起连接,连接成功后senderFD代表了客户机和服务器的一个socket连接
+    if(connect(fd,(struct sockaddr*)&ServerAddr, ServerAddr_length) < 0)
+    {
+        LOG << "Can Not Connect To ServerAddr!\n" << endl;;
+        throw exception();
+    }
+	int connfd = fd;
+	fd = -1;
+	return Connection(fd,ServerAddr);
+}
+
+ClientSocket::~ClientSocket(){
+
 }
