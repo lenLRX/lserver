@@ -1,5 +1,9 @@
 #include "HttpParser.h"
 
+HttpParser::HttpParser(){
+
+}
+
 HttpRequest HttpParser::parse(){
 	HttpRequest request;
 	string buffer(ss.str());
@@ -72,6 +76,10 @@ HttpRequest HttpParser::parse(){
 
 	
 	return request;
+}
+
+string HttpParser::str(){
+	return ss.str();
 }
 
 HttpParser& HttpParser::operator << (string str){

@@ -9,6 +9,7 @@ public:
     HttpParser();
 	HttpParser& operator << (string str);
 	HttpRequest parse();
+	string str();
 private:
     stringstream ss;
 };

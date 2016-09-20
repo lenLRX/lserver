@@ -3,7 +3,7 @@ LD = g++
 export CFLAGS = -g -pthread -std=c++11#order matters
 LDFLAGS = -pthread
 ROOT_DIR=$(shell pwd)
-SUBDIRS=$(shell ls -d */|grep -v "build"|grep -v "temp")
+SUBDIRS=$(shell ls -d */|grep -v "build"|grep -v "temp"|grep -v "web")
 SRCS := $(wildcard *.cpp)  
 OBJS := $(patsubst %cpp,%o,$(SRCS))
 COMMONOBJS=$(shell find ./build/obj -name "*.o")
@@ -14,7 +14,10 @@ BINDIR=$(ROOT_DIR)/build/bin/
 
 .IGNORE:MKOBJDIR
 
-all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests httplisten
+all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests httplisten http_static_server
+
+http_static_server:
+	$(LD) $(LDFLAGS) -o $(BINDIR)http_static_server $(COMMONOBJS) http_static_server.o
 
 httplisten:
 	$(LD) $(LDFLAGS) -o $(BINDIR)httplisten $(COMMONOBJS) httplisten.o
@@ -39,5 +42,5 @@ ECHO:
 	@echo $(SUBDIRS)
 
 clean:
-	rm build/obj/
-	rm build/bin/
+	rm -rf build/obj/
+	rm -rf build/bin/
