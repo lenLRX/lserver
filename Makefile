@@ -32,7 +32,6 @@ $(SUBDIRS):ECHO
 
 
 MKOBJDIR:
-	-mkdir build
 	-mkdir build/obj/
 	-mkdir build/bin/
 
@@ -40,4 +39,5 @@ ECHO:
 	@echo $(SUBDIRS)
 
 clean:
-	rm -rf build/
+	rm build/obj/
+	rm build/bin/
