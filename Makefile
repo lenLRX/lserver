@@ -1,6 +1,6 @@
 CC = g++
 LD = g++
-export CFLAGS = -pthread -std=c++11#order matters
+export CFLAGS = -g -pthread -std=c++11#order matters
 LDFLAGS = -pthread
 ROOT_DIR=$(shell pwd)
 SUBDIRS=$(shell ls -d */|grep -v "build"|grep -v "temp")
@@ -17,7 +17,7 @@ BINDIR=$(ROOT_DIR)/build/bin/
 all:MKOBJDIR $(SUBDIRS) $(OBJS) runtests httplisten
 
 httplisten:
-	$(LD) $(LDFLAGS) -o $(BINDIR)runtests $(COMMONOBJS) httplisten.o
+	$(LD) $(LDFLAGS) -o $(BINDIR)httplisten $(COMMONOBJS) httplisten.o
 
 runtests:
 	$(LD) $(LDFLAGS) -o $(BINDIR)runtests $(COMMONOBJS) runtests.o
@@ -32,6 +32,7 @@ $(SUBDIRS):ECHO
 
 
 MKOBJDIR:
+	-mkdir build
 	-mkdir build/obj/
 	-mkdir build/bin/
 

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <errno.h>
 
 using namespace std;
 #define LOG Logger::getInstance() << __FILE__ << " line " << __LINE__ << ":"

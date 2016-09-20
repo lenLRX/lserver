@@ -57,7 +57,7 @@ private:
 class ServerSocket:public Socket
 {
 public:
-	ServerSocket(string ip,int port);
+	ServerSocket(int port);
 	Connection accept();
 	~ServerSocket();
 };
