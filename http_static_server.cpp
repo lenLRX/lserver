@@ -50,6 +50,9 @@ int main(){
 
 		string path = string(".")+request.uri;
 
+		if(request.uri == "/")
+		    path = "./web/hello.html";
+
 		HttpResponse response;
 		if(access(path.c_str(),F_OK|R_OK) == 0){
             string content = html_reader(path);
