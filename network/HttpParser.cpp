@@ -65,6 +65,8 @@ HttpRequest HttpParser::parse(){
 		}
 	}
 
+	request.uri = move(uri);
+
     //Ignore HTTP VERSION now,TODO: fixme later
 	for(;it!=end;it++){
 		if(*it == '\n'){
