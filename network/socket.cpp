@@ -1,5 +1,6 @@
 #include "socket.h"
 #include "../log/log.h"
+#include <sys/select.h>
 
 Socket::Socket():fd(-1)
 {}
@@ -29,6 +30,23 @@ Connection& Connection::operator = (Connection& other){
 	other.fd = -1;
 	this->opp_addr = other.opp_addr;
 	return *this;
+}
+
+//read which can be time out
+int Connection::read(void* buf,size_t nbytes,int secs,int usec){
+	fd_set set;
+	struct timeval timeout;
+	FD_ZERO(&set);
+	FD_SET(fd,&set);
+	timeout.tv_sec = secs;
+	timeout.tv_usec = usec;
+
+	int ret = select(fd+1,&set,NULL,NULL,&timeout);
+	if(ret <=0){
+		return ret;
+	}else{
+		return socket_namespace::read(fd,buf,nbytes);
+	}
 }
 	
 int Connection::read(void *buf,size_t nbytes){

@@ -32,6 +32,7 @@ public:
 	Connection(Connection&& temp);
 	Connection& operator = (Connection& other);
 	int read(void *buf,size_t nbytes);
+	int read(void* buf,size_t nbytes,int secs,int usec);
 	int write(const void *buf,size_t nbytes);
 	inline bool isblocking() const{
 		int flags = fcntl(fd,F_GETFL,0);

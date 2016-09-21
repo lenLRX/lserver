@@ -1,18 +1,26 @@
-#include "log/log.h"
-#include "network/http.h"
-#include "network/HttpParser.h"
-#include "network/HttpResponse.h"
-#include "network/HttpRequest.h"
-#include "network/socket.h"
+#include "SingleThreadServer.h"
+#include "../network/HttpResponse.h"
+#include "../network/HttpParser.h"
 #include "utility/html_reader.h"
+#include <iostream>
 
 #include <sstream>
 
 static const int buffersize = 256;
-int main(){
-	Logger::getInstance().redirectStream("temp/static_server.txt");
+
+void SingleThreadServer::start(){
+	running = true;
+	internalThread = thread(bind(&SingleThreadServer::loop,this));
+}
+
+void SingleThreadServer::stop(){
+	running = false;
+	internalThread.join();
+}
+
+void SingleThreadServer::loop(){
 	ServerSocket server_sock(http_port);
-	while(true){
+	while(running){
 		Connection conn = server_sock.accept();
 		HttpParser parser;
 		cout << "connection accepted" << endl;
@@ -46,6 +54,8 @@ int main(){
 		
 		HttpRequest request = parser.parse();
 
+		requestHandler.handle(conn,request);
+
 		cout << "uri: " << request.uri << endl << flush;
 
 		string path = string(".")+request.uri;
@@ -66,5 +76,4 @@ int main(){
 		string response_string(response.str());
 		conn.write(response_string.c_str(),response_string.size());
 	}
-	return 0;
 }
