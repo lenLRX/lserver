@@ -1,12 +1,20 @@
 #include "SingleThreadServer.h"
 #include "../network/HttpResponse.h"
 #include "../network/HttpParser.h"
-#include "utility/html_reader.h"
+#include "../utility/html_reader.h"
 #include <iostream>
 
 #include <sstream>
 
 static const int buffersize = 256;
+
+SingleThreadServer::SingleThreadServer(){
+
+}
+
+SingleThreadServer::~SingleThreadServer(){
+
+}
 
 void SingleThreadServer::start(){
 	running = true;
@@ -21,41 +29,46 @@ void SingleThreadServer::stop(){
 void SingleThreadServer::loop(){
 	ServerSocket server_sock(http_port);
 	while(running){
-		Connection conn = server_sock.accept();
-		HttpParser parser;
-		cout << "connection accepted" << endl;
-		while(true){
-			char buffer[buffersize];
-			bzero(buffer,buffersize);
+		try{
+			Connection conn = server_sock.accept();
+			HttpParser parser;
+			cout << "connection accepted" << endl;
+			while(true){
+				char buffer[buffersize];
+				bzero(buffer,buffersize);
 
-			int length = conn.read(buffer,buffersize,10,0);
+				int length = conn.read(buffer,buffersize,10,0);
 
-			//cout << length << "bytes read" << endl;
+				//cout << length << "bytes read" << endl;
 
-			if(length < 0){
-				cout << "read failed" << endl;
-				cout << strerror(errno) << endl;
-				break;
-			}else if(length == 0){
-				break;
+				if(length < 0){
+					cout << "read failed" << endl;
+					cout << strerror(errno) << endl;
+					break;
+				}else if(length == 0){
+					break;
+				}
+
+
+
+				string frag = string(buffer);
+				parser << frag;
+				string s = parser.str();
+				cout << frag <<flush;
+				int len = s.size();
+				if(len > 3 && s[len-1] == '\n' && s[len - 3] == '\n'){
+					break;
+				}
 			}
+			
+			HttpRequest request = parser.parse();
 
-
-
-			string frag = string(buffer);
-			parser << frag;
-			string s = parser.str();
-			cout << frag <<flush;
-			int len = s.size();
-			if(len > 3 && s[len-1] == '\n' && s[len - 3] == '\n'){
-				break;
-			}
+			requestHandler.handle(move(conn),request);
+		}catch(exception e){
+			;//ignore
 		}
-		
-		HttpRequest request = parser.parse();
 
-		requestHandler.handle(conn,request);
-
+		/*
 		cout << "uri: " << request.uri << endl << flush;
 
 		string path = string(".")+request.uri;
@@ -75,5 +88,6 @@ void SingleThreadServer::loop(){
 		
 		string response_string(response.str());
 		conn.write(response_string.c_str(),response_string.size());
+		*/
 	}
 }
