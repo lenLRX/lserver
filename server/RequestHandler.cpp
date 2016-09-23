@@ -1,4 +1,5 @@
 #include "RequestHandler.h"
+#include "../log/log.h"
 #include "../network/HttpResponse.h"
 #include "../utility/html_reader.h"
 
@@ -20,13 +21,20 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 	if(access(path.c_str(),F_OK|R_OK) == 0){
         string content = html_reader(path);
 		response.setContent(content);
+		response.setContentType(html_type);
 	}else{
 		response.StatusCode = 404;
 		string content = html_reader("./web/404.html");
 		response.setContent(content);
 		response.setContentType(html_type);
 	}
+
+	ByteBuffer byteBuffer = response.getBuffer();
 		
-	string response_string(response.str());
-	conn.write(response_string.c_str(),response_string.size());
+	while(byteBuffer){
+		pair<void*,int> ret = byteBuffer.get(256);
+		LOG << string((const char*)ret.first,ret.second) << flush;
+		conn.write(ret.first,ret.second);
+	}
+	
 }

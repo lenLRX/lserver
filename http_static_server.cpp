@@ -51,20 +51,25 @@ int main(){
 		string path = string(".")+request.uri;
 
 		if(request.uri == "/")
-		    path = "./web/hello.html";
+			path = "./web/hello.html";
 
 		HttpResponse response;
 		if(access(path.c_str(),F_OK|R_OK) == 0){
-            string content = html_reader(path);
-		    response.setContent(content);
+			string content = html_reader(path);
+			response.setContent(content);
 		}else{
 			response.StatusCode = 404;
 			string content = html_reader("./web/404.html");
-		    response.setContent(content);
+			response.setContent(content);
+			response.setContentType(html_type);
 		}
-		
-		string response_string(response.str());
-		conn.write(response_string.c_str(),response_string.size());
+
+		ByteBuffer byteBuffer = response.getBuffer();
+			
+		while(byteBuffer){
+			pair<void*,int> ret = byteBuffer.get(256);
+			conn.write(ret.first,ret.second);
+		}
 	}
 	return 0;
 }

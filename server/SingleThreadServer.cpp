@@ -2,6 +2,7 @@
 #include "../network/HttpResponse.h"
 #include "../network/HttpParser.h"
 #include "../utility/html_reader.h"
+#include "../log/log.h"
 #include <iostream>
 
 #include <sstream>

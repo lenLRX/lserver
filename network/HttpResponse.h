@@ -8,7 +8,7 @@ class HttpResponse
 {
 public:
     HttpResponse();
-    string str();
+    ByteBuffer getBuffer();
 	string version;
 	int StatusCode;
 	const static map<int,string> StatusCode2Reason;

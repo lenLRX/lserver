@@ -11,9 +11,13 @@ class ByteBuffer
 public:
     ByteBuffer();
 	ByteBuffer(ByteBuffer&& other);
+	ByteBuffer(string str);
 	ByteBuffer(const ByteBuffer& other) = delete;
 	ByteBuffer& operator = (ByteBuffer& other);
 	ByteBuffer& operator = (string& str);
+	ByteBuffer& operator = (string str);
+	ByteBuffer& operator += (string& str);
+	ByteBuffer& operator += (string str);
 	operator string();
 	operator bool();
 		
@@ -22,6 +26,7 @@ public:
 		pointer = 0;
 	}
 	pair<void*,int> get(int nbytes);
+	void put(const void* ptr,int nbytes);
 	void put(void* ptr,int nbytes);
 	inline int size(){
 		return buffersize;
