@@ -45,8 +45,10 @@ void SingleThreadServer::loop(){
 				if(length < 0){
 					cout << "read failed" << endl;
 					cout << strerror(errno) << endl;
+					throw exception();
 					break;
 				}else if(length == 0){
+					throw exception();
 					break;
 				}
 
