@@ -25,6 +25,16 @@ capacity(initial_capacity){
 	put(str.data(),str.size());
 }
 
+ByteBuffer::ByteBuffer(const ByteBuffer& other)
+:pointer(other.pointer),
+buffersize(other.buffersize),capacity(other.capacity){
+	if(buffer != nullptr){
+		free(buffer);
+	}
+	buffer = (char*) malloc(capacity);
+	memcpy(buffer,other.buffer,buffersize);
+}
+
 ByteBuffer::~ByteBuffer(){
 	free(buffer);
 }
@@ -46,14 +56,12 @@ ByteBuffer& ByteBuffer::operator = (ByteBuffer& other){
 }
 
 ByteBuffer& ByteBuffer::operator = (string& str){
-	buffer = (char*) realloc(buffer,str.size());
-	memcpy(buffer,str.data(),str.size());
+	put(str.data(),str.size());
 	return *this;
 }
 
 ByteBuffer& ByteBuffer::operator = (string str){
-	buffer = (char*) realloc(buffer,str.size());
-	memcpy(buffer,str.data(),str.size());
+	put(str.data(),str.size());
 	return *this;
 }
 

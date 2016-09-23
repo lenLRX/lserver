@@ -1,7 +1,9 @@
 #include "RequestHandler.h"
+
 #include "../log/log.h"
 #include "../network/HttpResponse.h"
 #include "../utility/html_reader.h"
+#include "../utility/resource_reader.h"
 
 RequestHandler::RequestHandler(){
 
@@ -19,9 +21,9 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 
 	HttpResponse response;
 	if(access(path.c_str(),F_OK|R_OK) == 0){
-        string content = html_reader(path);
-		response.setContent(content);
-		response.setContentType(html_type);
+		Resource resource = ResourceReader::getResource(path);
+		response.setContent(resource.getResouce());
+		response.setContentType(resource.getType());
 	}else{
 		response.StatusCode = 404;
 		string content = html_reader("./web/404.html");

@@ -12,7 +12,7 @@ public:
     ByteBuffer();
 	ByteBuffer(ByteBuffer&& other);
 	ByteBuffer(string str);
-	ByteBuffer(const ByteBuffer& other) = delete;
+	explicit ByteBuffer(const ByteBuffer& other);
 	ByteBuffer& operator = (ByteBuffer& other);
 	ByteBuffer& operator = (string& str);
 	ByteBuffer& operator = (string str);
