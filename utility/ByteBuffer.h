@@ -1,6 +1,8 @@
 #ifndef __BYTEBUFFER_H__
 #define __BYTEBUFFER_H__
 #include <utility>
+#include <string>
+#include <cstring>//memcpy
 #include <cstdlib>
 using namespace std;
 
@@ -10,14 +12,20 @@ public:
     ByteBuffer();
 	ByteBuffer(ByteBuffer&& other);
 	ByteBuffer(const ByteBuffer& other) = delete;
-	ByteBuffer& operator = (ByteBuffer& other) = delete;
-	
+	ByteBuffer& operator = (ByteBuffer& other);
+	ByteBuffer& operator = (string& str);
+	operator string();
+	operator bool();
+		
 	~ByteBuffer();
 	inline void rewind(){
 		pointer = 0;
 	}
 	pair<void*,int> get(int nbytes);
 	void put(void* ptr,int nbytes);
+	inline int size(){
+		return buffersize;
+	}
 private:
     inline void increase_capacity(){
 		capacity *= incr_factor;
@@ -27,7 +35,7 @@ private:
 
     char* buffer;
 	int pointer;
-	int size;
+	int buffersize;
 	int capacity;
 	const static int initial_capacity;
 	const static float incr_factor;// capacity *= incr_factor;

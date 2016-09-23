@@ -24,6 +24,7 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 		response.StatusCode = 404;
 		string content = html_reader("./web/404.html");
 		response.setContent(content);
+		response.setContentType(html_type);
 	}
 		
 	string response_string(response.str());

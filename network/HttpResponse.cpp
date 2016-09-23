@@ -13,9 +13,9 @@ HttpResponse::HttpResponse():StatusCode(200),version("HTTP/1.1"){
 string HttpResponse::str(){
 	string ret;
 	ret += header();
-	ret += string("Content-length: ") + to_string(content.size())+crlf;
-	ret += string("Content-type:") + ContentType;
-	ret += content;
+	ret += string("Content-length: ") + to_string(content.size()) + crlf;
+	ret += string("Content-type:") + ContentType + crlf;
+	ret += crlf;
 	return ret;
 }
 
@@ -25,12 +25,12 @@ string HttpResponse::header(){
 	return ret;
 }
 
-void HttpResponse::setContent(string str){
-	content = move(str);
+void HttpResponse::setContent(ByteBuffer buffer){
+	content = move(buffer);
 }
 
-string HttpResponse::getContent(){
-	return content;
+ByteBuffer HttpResponse::getContent(){
+	return move(content);
 }
 
 void HttpResponse::setContentType(string type){

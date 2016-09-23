@@ -1,5 +1,7 @@
 #include "html_reader.h"
 
+const string html_type = "text/html;charset=utf-8";
+
 string html_reader(string filename){
 	string ret;
 	ifstream html(filename);

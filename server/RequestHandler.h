@@ -3,11 +3,13 @@
 #include "../network/http.h"
 #include "../network/socket.h"
 #include "../network/HttpRequest.h"
+#include "../utility/ByteBuffer.h"
 class RequestHandler
 {
 public:
     RequestHandler();
 	~RequestHandler();
 	void handle(Connection conn,HttpRequest request);
+	
 };
 #endif//__REQUEST_HANDLER_H__
