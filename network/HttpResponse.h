@@ -13,8 +13,11 @@ public:
 	const static map<int,string> StatusCode2Reason;
 	string header();
 	void setContent(string str);
+	void setContentType(string type);
+	string getContentType();
 	string getContent();
 private:
     string content;
+	string ContentType;
 };
 #endif//__HTTP_RESPONSE_H__
