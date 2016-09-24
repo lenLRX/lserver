@@ -23,7 +23,8 @@ Resource ResourceReader::getResource(string path){
 		resource.byteBuffer = BinaryReader(path);
 	}else if(suffix == "html"){
 		resource.type = html_type;
-		resource.byteBuffer = html_reader(path);
+		resource.byteBuffer = BinaryReader(path);
+		//resource.byteBuffer = html_reader(path);
 	}else{
 		resource.type = "test/plain";
 		resource.byteBuffer = BinaryReader(path);

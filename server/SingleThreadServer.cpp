@@ -33,7 +33,7 @@ void SingleThreadServer::loop(){
 		try{
 			Connection conn = server_sock.accept(5,0);
 			HttpParser parser;
-			cout << "connection accepted" << endl;
+			//cout << "connection accepted" << endl;
 			while(true){
 				char buffer[buffersize];
 				bzero(buffer,buffersize);
