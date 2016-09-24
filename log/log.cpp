@@ -22,7 +22,7 @@ Logger& Logger::getInstance(){
 
 Logger::Logger() :stream(cout.rdbuf())
 {
-	stream.sync_with_stdio(false);
+	//stream.sync_with_stdio(false);
 }
 
 Logger::~Logger()

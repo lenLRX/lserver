@@ -60,6 +60,7 @@ class ServerSocket:public Socket
 public:
 	ServerSocket(int port);
 	Connection accept();
+	Connection accept(int secs,int usec);//timeout
 	~ServerSocket();
 };
 

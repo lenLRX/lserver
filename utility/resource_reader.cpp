@@ -17,7 +17,7 @@ Resource ResourceReader::getResource(string path){
 		suffix.push_back(path[i]);
 	}
 	reverse(suffix.begin(),suffix.end());
-	cout << "type:" << suffix << endl << flush;
+	LOG << "type:" << suffix << endl << flush;
 	if(suffix == "gif"){
 		resource.type = "image/gif";
 		resource.byteBuffer = BinaryReader(path);
@@ -25,7 +25,8 @@ Resource ResourceReader::getResource(string path){
 		resource.type = html_type;
 		resource.byteBuffer = html_reader(path);
 	}else{
-		throw exception();
+		resource.type = "test/plain";
+		resource.byteBuffer = BinaryReader(path);
 	}
 
 	return resource;

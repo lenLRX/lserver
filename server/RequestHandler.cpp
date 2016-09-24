@@ -35,7 +35,6 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 		
 	while(byteBuffer){
 		pair<void*,int> ret = byteBuffer.get(256);
-		LOG << string((const char*)ret.first,ret.second) << flush;
 		conn.write(ret.first,ret.second);
 	}
 	

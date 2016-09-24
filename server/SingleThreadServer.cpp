@@ -29,9 +29,9 @@ void SingleThreadServer::stop(){
 
 void SingleThreadServer::loop(){
 	ServerSocket server_sock(http_port);
-	while(running){
+	do{
 		try{
-			Connection conn = server_sock.accept();
+			Connection conn = server_sock.accept(5,0);
 			HttpParser parser;
 			cout << "connection accepted" << endl;
 			while(true){
@@ -70,27 +70,5 @@ void SingleThreadServer::loop(){
 		}catch(exception e){
 			;//ignore
 		}
-
-		/*
-		cout << "uri: " << request.uri << endl << flush;
-
-		string path = string(".")+request.uri;
-
-		if(request.uri == "/")
-		    path = "./web/hello.html";
-
-		HttpResponse response;
-		if(access(path.c_str(),F_OK|R_OK) == 0){
-            string content = html_reader(path);
-		    response.setContent(content);
-		}else{
-			response.StatusCode = 404;
-			string content = html_reader("./web/404.html");
-		    response.setContent(content);
-		}
-		
-		string response_string(response.str());
-		conn.write(response_string.c_str(),response_string.size());
-		*/
-	}
+	}while(running);
 }

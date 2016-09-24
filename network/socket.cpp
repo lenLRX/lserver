@@ -103,6 +103,27 @@ Connection ServerSocket::accept(){
 	return Connection(conn,client_addr);
 }
 
+Connection ServerSocket::accept(int secs,int usec){
+	struct sockaddr_in client_addr;
+	socklen_t client_addr_len = sizeof(client_addr);
+
+	fd_set set;
+	struct timeval timeout;
+	FD_ZERO(&set);
+	FD_SET(fd,&set);
+	timeout.tv_sec = secs;
+	timeout.tv_usec = usec;
+
+	int ret = select(fd+1,&set,NULL,NULL,&timeout);
+	if(ret <=0){
+		LOG << "accept failure or timeout" << endl;
+	}else{
+		int conn = ::accept(fd,(struct sockaddr*)&client_addr, &client_addr_len);
+	    return Connection(conn,client_addr);
+	}
+	return Connection(-1,client_addr);
+}
+
 ServerSocket::~ServerSocket(){
 	;
 }
