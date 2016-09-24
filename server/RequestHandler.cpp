@@ -21,15 +21,18 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 	    path = "/web/hello.html";
 
 	HttpResponse response;
+	vpath _vpath;
+	path = _vpath.translate(path);
 	if(access(path.c_str(),F_OK|R_OK) == 0){
 		response.StatusCode = 200;
 	}else{
 		response.StatusCode = 404;
-		string content = html_reader("/web/404.html");
+		path = _vpath.translate("/web/404.html");;
 	}
 
-	vpath _vpath;
-	path = _vpath.translate(path);
+	LOG << "response.StatusCode = " << to_string(response.StatusCode) << endl;
+
+	
 
 	Resource resource = ResourceReader::getResource(path);
 	response.setContent(resource.getResouce());

@@ -21,6 +21,9 @@ Resource ResourceReader::getResource(string path){
 	if(suffix == "gif"){
 		resource.type = "image/gif";
 		resource.byteBuffer = BinaryReader(path);
+	}else if(suffix == "jpg"){
+		resource.type = "image/jpeg";
+		resource.byteBuffer = BinaryReader(path);
 	}else if(suffix == "html"){
 		resource.type = html_type;
 		resource.byteBuffer = BinaryReader(path);

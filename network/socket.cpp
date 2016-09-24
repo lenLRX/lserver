@@ -117,6 +117,7 @@ Connection ServerSocket::accept(int secs,int usec){
 	int ret = select(fd+1,&set,NULL,NULL,&timeout);
 	if(ret <=0){
 		//LOG << "accept failure or timeout" << endl;
+		throw exception();
 	}else{
 		int conn = ::accept(fd,(struct sockaddr*)&client_addr, &client_addr_len);
 	    return Connection(conn,client_addr);
