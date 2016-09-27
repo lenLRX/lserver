@@ -15,6 +15,9 @@ ByteBuffer HttpResponse::getBuffer(){
 	ret += header();
 	ret += string("Content-length: ") + to_string(content.size()) + crlf;
 	ret += string("Content-type:") + ContentType + crlf;
+	for(const string& field:Fields){
+		ret += field + crlf;
+	}
 	ret += crlf;
 	ret += content;
 	return ret;
@@ -40,4 +43,8 @@ void HttpResponse::setContentType(string type){
 
 string HttpResponse::getContentType(){
 	return ContentType;
+}
+
+void HttpResponse::addField(string field){
+	Fields.push_back(field);
 }

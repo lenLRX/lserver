@@ -54,10 +54,9 @@ void SingleThreadServer::loop(){
 
 
 
-				string frag = string(buffer);
-				parser << frag;
+				
+				parser.put(buffer,length);
 				string s = parser.str();
-				cout << frag <<flush;
 				int len = s.size();
 				if(len > 3 && s[len-1] == '\n' && s[len - 3] == '\n'){
 					break;

@@ -2,6 +2,7 @@
 #define __HTTP_RESPONSE_H__
 #include <string>
 #include <map>
+#include <vector>
 #include "../utility/ByteBuffer.h"
 using namespace std;
 class HttpResponse
@@ -17,8 +18,10 @@ public:
 	void setContentType(string type);
 	string getContentType();
 	ByteBuffer getContent();
+	void addField(string field);
 private:
     ByteBuffer content;
 	string ContentType;
+	vector<string> Fields;
 };
 #endif//__HTTP_RESPONSE_H__

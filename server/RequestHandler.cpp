@@ -33,6 +33,8 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 		string rfctime(ctime2rfc822date(originTime));
 		LOG << rfctime << endl;
 		response.StatusCode = 200;
+		response.addField(string("Cache-Control:public"));
+		response.addField(string("Last-Modified:") + rfctime);
 	}else{
 		response.StatusCode = 404;
 		path = _vpath.translate("/web/404.html");;

@@ -1,16 +1,18 @@
 #ifndef __HTTP_PARSER_H__
 #define __HTTP_PARSER_H__
-#include <sstream>
+#include <string>
+#include "../utility/ByteBuffer.h"
 #include "HttpRequest.h"
 using namespace std;
 class HttpParser
 {
 public:
     HttpParser();
-	HttpParser& operator << (string str);
+	HttpParser& put(const void* ptr,int nbytes);
+	HttpParser& put(void* ptr,int nbytes);
 	HttpRequest parse();
 	string str();
 private:
-    stringstream ss;
+    ByteBuffer buffer;
 };
 #endif//__HTTP_PARSER_H__

@@ -1,4 +1,5 @@
 #include "HttpParser.h"
+#include "../log/log.h"
 
 HttpParser::HttpParser(){
 
@@ -6,9 +7,9 @@ HttpParser::HttpParser(){
 
 HttpRequest HttpParser::parse(){
 	HttpRequest request;
-	string buffer(ss.str());
-	string::iterator it = buffer.begin();
-	string::iterator end = buffer.end();
+	string _buffer(buffer);
+	string::iterator it = _buffer.begin();
+	string::iterator end = _buffer.end();
 	
 
 	//parsing RequestLine
@@ -75,16 +76,54 @@ HttpRequest HttpParser::parse(){
 		}
 	}
 
+	//parsing header
+	while(it!=end && *it != '\r'){
+		string request_header;
+		string field;
+		for(;it!=end;it++){
+			if(*it == ':'){
+				it++;
+				break;
+			}else{
+				request_header.push_back(*it);
+			}
+		}
+
+		while(*it == ' '){
+			it++;
+		}
+
+		for(;it!=end;it++){
+			if(*it == '\r'){
+				it++;
+				it++;
+				break;
+			}else{
+				field.push_back(*it);
+			}
+		}
+		LOG << "parsed filed " << request_header << " " << field << endl;
+		request.headers.insert(pair<string,string>(request_header,field));
+	}
+
+    //TODO: support message-body
+	//https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html
+
 
 	
 	return request;
 }
 
 string HttpParser::str(){
-	return ss.str();
+	return string(buffer);
 }
 
-HttpParser& HttpParser::operator << (string str){
-	ss << str;
+HttpParser& HttpParser::put(const void* ptr,int nbytes){
+	buffer.put(ptr,nbytes);
+	return *this;
+}
+
+HttpParser& HttpParser::put(void* ptr,int nbytes){
+	buffer.put(ptr,nbytes);
 	return *this;
 }
