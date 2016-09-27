@@ -3,6 +3,7 @@
 
 const map<int,string> HttpResponse::StatusCode2Reason{
 	{200,"OK"},
+	{304, "Not Modified"},
 	{404,"Not Found"}};
 
 

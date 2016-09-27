@@ -120,6 +120,7 @@ Connection ServerSocket::accept(int secs,int usec){
 		throw exception();
 	}else{
 		int conn = ::accept(fd,(struct sockaddr*)&client_addr, &client_addr_len);
+		LOG << "accepted connection from: " << string(inet_ntoa(client_addr.sin_addr)) << endl;;
 	    return Connection(conn,client_addr);
 	}
 	return Connection(-1,client_addr);

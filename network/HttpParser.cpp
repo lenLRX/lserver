@@ -102,7 +102,7 @@ HttpRequest HttpParser::parse(){
 				field.push_back(*it);
 			}
 		}
-		LOG << "parsed filed " << request_header << " " << field << endl;
+		//LOG << "parsed filed " << request_header << " " << field << endl;
 		request.headers.insert(pair<string,string>(request_header,field));
 	}
 
