@@ -15,6 +15,8 @@ int main(){
 
 	SUMMARY;
 
+	LOG << "TEST END" << endl;
+
 	return 0;
 }
 
