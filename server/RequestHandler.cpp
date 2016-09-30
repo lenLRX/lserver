@@ -32,7 +32,8 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 		string originTime(ctime(&mtime));
 		string rfctime(ctime2rfc822date(originTime));
 		if(request.headers.find("If-Modified-Since") != 
-		request.headers.end() && rfc822date2time_t(rfctime) == mtime){
+		request.headers.end() && 
+		rfc822date2time_t(request.headers.at("If-Modified-Since")) == mtime){
 			code304(response);
 		}else{
 			code200(response,rfctime,path);
