@@ -67,7 +67,7 @@ void SingleThreadServer::loop(){
 
 			requestHandler.handle(move(conn),request);
 		}catch(exception e){
-			;//ignore
+			;//LOG << "catch: " << e.what() << endl;
 		}
 	}while(running);
 }

@@ -31,13 +31,18 @@ void RequestHandler::handle(Connection conn,HttpRequest request){
 		time_t mtime = LastModifiedTIme(path);
 		string originTime(ctime(&mtime));
 		string rfctime(ctime2rfc822date(originTime));
+		//TODO FIX IT
+		/*
 		if(request.headers.find("If-Modified-Since") != 
 		request.headers.end() && 
 		rfc822date2time_t(request.headers.at("If-Modified-Since")) == mtime){
+			LOG << "304 1" <<endl;
 			code304(response);
 		}else{
+			LOG << "200 1" <<endl;
 			code200(response,rfctime,path);
-		}
+		}*/
+		code200(response,rfctime,path);
 	}else{
 		path = _vpath.translate("/web/404.html");
 		code404(response,path);
