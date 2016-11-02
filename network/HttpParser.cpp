@@ -11,7 +11,7 @@ HttpRequest HttpParser::parse(){
 	string::iterator it = _buffer.begin();
 	string::iterator end = _buffer.end();
 	
-	LOG << "debug chrome " << str()<<endl;
+	//LOG << "debug chrome " << str()<<endl;
 
 	//parsing RequestLine
 
